@@ -1,2 +1,1 @@
-# cmsos
- Common files for CMSOS
+See https://cmsos.github.io/cmsos/index.html
