@@ -37,14 +37,17 @@
       In complex cases extract molecule,
       reorder it with <code>MolMod/exam_Geometry.mw/Molecules: Partition molecule and identify fragments</code> code,
       and use the result as reference for reordering.</li>
+  <li>If symmetry-equivalent conformers are present, chose the conformer consistent with the rest of data,
+      i.e. it should differ from a reference monomer by a translation only, and, if needed, a proper rotation.</li>
   <li>Symmetrize molecule at fixed digits.</li>
   <li>Add missing or replace ill-positioned hydrogens with PM7-optmized ones using
       <code>MolMod/exam_Geometry.mw/Crystals: add missing hydrogens</code>.</li>
   </ul></li>
 <li>Provide generators <code>g11,g12,...,g21,g22,...</code> explicitly
-    and modify them in CIF to get the right unit cell
-    (<code>gm1</code> generates m-th molecule, it should be a pure rotation if possible).</li>
+    and modify them in CIF to get the optimally packed unit cell
+    (<code>gm1</code> generates m-th molecule, it should be a proper rotation if possible).</li>
 <li>Save XYZ (<a href="exam_exp.xyz">example</a>) and keep also thus created CIF (<a href="exam_exp.cif">example</a>).</li>
+<li>Store the full symmetry information in XYZ-file including <code>SG,nm,nas,orbs</code> defined <a href="../bmcos/datanames.html">here</a>.</li>
 </ul>
 
 <h2><a name="molcry.geo.opt">Molecular crystal geometry optimization</a></h2>
