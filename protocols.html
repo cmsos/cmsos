@@ -20,13 +20,14 @@
 <hr>
 
 <h2><a name="molcry.geo.cif">Molecular crystal CIF refinement</a></h2>
+<p style="font-size: smaller">Reference: <a href="https://doi.org/10.1021/acs.jctc.3c00861">JCTC 19, 8481 (2023)</a>
+<br>Code: <code>exam_cif2xyz.mw</code> from <a href="https://zhugayevych.me/maple/MolMod/index.html">MolMod package</a></p>
 <ul>
-<li>Use <code>MolMod/exam_cif2xyz.mw</code>, see <a href="https://zhugayevych.me/maple/MolMod/index.html">MolMod package</a>.</li>
 <li>Create CIF draft according to <a href="template2.cif">this template</a>.</li>
 <li>Preprocess CIF draft:
   <ul>
   <li>Generate entire molecule and move it (to the origin if possible).</li>
-  <li>Change symmetry settings.</li>
+  <li>Change symmetry settings if needed.</li>
   <li>If there are multiple symmetry-inequivalent molecules in the unit cell,
       create separate CIF for each of them and process separately.
       If molecules are naturally grouped (solute+solvent, charge-transfer pair),
@@ -51,8 +52,9 @@
 </ul>
 
 <h2><a name="molcry.geo.opt">Molecular crystal geometry optimization</a></h2>
+<p style="font-size: smaller">Reference: <a href="https://doi.org/10.1021/acs.jctc.3c00861">JCTC 19, 8481 (2023)</a>
+<br>Code: <code>exam_vas.mw</code> from <a href="https://zhugayevych.me/maple/MolMod/index.html">MolMod package</a></p>
 <ul>
-<li>Use <code>MolMod/exam_vas.mw</code>, see <a href="https://zhugayevych.me/maple/MolMod/index.html">MolMod package</a>.</li>
 <li>Start with refined CIF (<a href="exam_exp.cif">example</a>) converted to XYZ (<a href="exam_exp.xyz">example</a>).</li>
 <li>Each disorder group requires separate optimization.</li>
 <li>Use PBE-D3/PAW as optimal trade-off between accuracy and complexity.</li>
@@ -94,8 +96,9 @@
 </ul>
 
 <h2><a name="molcry.geo.det">Determination of molecular crystal geometry from MD snapshot of a large supercell</a></h2>
+<p style="font-size: smaller">Reference: <a href="https://doi.org/10.1063/5.0155488">JCP 159, 024107 (2023)</a>
+<br>Code: <code>ITIC4F/dat/main.mw/Crystal</code> (available per request)</p>
 <ul>
-<li>Use <code>ITIC4F/dat/main.mw/Crystal</code></li>
 <li>It is assumed that all molecules are connected.</li>
 <li>Group molecules into translationally invariant sets.</li>
 <li>Determine cell translations using a reference atom and then fold cells.</li>
@@ -105,7 +108,7 @@
     2) Analyze disorder by histograms in proper coordinates.
     3) Use cluster analysis (density-based such as DBSCAN and Gaussian distribution-based) to determine disorder groups.
     4) Discard nonessential groups.</li>
-<li>Fix a disorder group and calculate average molecule.
+<li>Fix a disorder group and calculate the average molecule.
     Identify atoms whose average position is meaningless and determine their mean positions in internal coordinates.
     In particular, aliphatic side chains often can be defined only by fixing C-C-C-C dihedrals to their most probable value
     consistent with average position of the chain in cartesian coordinates.</li>
@@ -115,8 +118,9 @@
 </ul>
 
 <h2><a name="ecg">Electronic coarse-graining of insulators</a></h2>
+<p style="font-size: smaller">Reference: <a href="https://doi.org/10.1063/5.0155488">JCP 159, 024107 (2023)</a> (initial development)
+<br>Code: <code>LocalizeMO.mw</code> from <a href="https://zhugayevych.me/maple/MolMod/index.html">MolMod package</a>, <code>QFT/Models/ECG/ECG.mw</code> (available per request)</p>
 <ul>
-<li>Use <code>QFT/Models/ECG/ECG.mw</code> or <code>MolMod/LocalizeMO.mw</code>, see <a href="https://zhugayevych.me/maple/MolMod/index.html">MolMod package</a>.</li>
 <li>PBC are supported only at Gamma point (supercell approach).</li>
 <li>Fragmentize system, identify repeating fragments (monomers), and save to file following quantities:
     1) fragments as <code>F=list(list(atom#))</code>;
@@ -151,10 +155,13 @@
 </ul>
 
 <h2><a name="molcry.ecg">Calculation of coarse-grained electronic Hamiltonian for molecular crystals</a></h2>
+<p style="font-size: smaller">Reference: in preparation, initial development is in <a href="https://doi.org/10.1146/annurev-physchem-040214-121440">Annu Rev Phys Chem 66, 305 (2015)</a>
+<br>Code: <code>_exam_Heff.mw</code> (under revision) from <a href="https://zhugayevych.me/maple/MolMod/index.html">MolMod package</a></p>
 <ul>
-<li>Use <code>MolMod/_exam_Heff.mw</code>, see <a href="https://zhugayevych.me/maple/MolMod/index.html">MolMod package</a>.</li>
-<li>Current implementation is limited to: 1) the same ECG basis for all monomers, 2) nondegenerate electronic states.
-    For π-conjugated systems, condition (1) implies that all monomers have the same π-conjugated backbone and are interconnected by single bonds.</li>
+<li>Current implementation is limited to:
+    1) the same ECG basis for all monomers,
+    2) nondegenerate electronic states (in crystal symmetry).
+    For π-conjugated systems, condition (1) implies that all electronically active monomers have the same π-conjugated backbone and are interconnected by single bonds.</li>
 <li>Load crystal structure, monomerize it,
     then rationalize site positions and initialize FGS subpackage of <a href="https://zhugayevych.me/maple/FiniteGroups/index.html">FiniteGroups package</a>.
     Important input parameters:
@@ -164,21 +171,35 @@
     <li><code>nm</code> number of molecules/polymers in the unit cell,</li>
     <li><code>F</code> fragmentation of each molecule/polymer.</li>
     </ul></li>
-<li>Step 1: Generate symmetry-unique multimers or supercell here or elsewhere (e.g. <code>Polymers.mw</code>) as a set of xyz-files.
-    In the simplest approximation, it is enough to consider only
-    1) nearest-neighbor dimers (up to 5~Ao between π-conjugated atoms),
-    2) hydrogen-passivated π-conjugated backbones instead of entire molecules.</li>
+<li>Step 1: Generate symmetry-unique multimers or supercell here or elsewhere (e.g. <code>Polymers.mw</code>).
+    Multimers are uniquely defined by lists of <code>mt=[m,t1,t2,t3]</code>, meaning
+    <code>m</code>-th molecule/polymer translated by <code>t</code>,
+    or equivalent string code used in <a href="filenames.html">filenames</a>.
+    Polymers can be approximated by long oligomers, see <a href="../escp/index.html">here</a>.
+    For transfer integrals it is usually enough to consider only nearest-neighbor dimers
+    and replace molecules by hydrogen-passivated π-conjugated backbones.
+    For onsite energies at least one shell of nearest neighbors is required.
+    A multimer should be centrosymmetric wrt to the target matrix element.
+    Nearest neighbors can be identified by the contact distance between π-conjugated atoms
+    with a reasonable cutoff of 5 Ao or at the nearest minimum of the corresponding distribution function.</li>
 <li>Step 2: Calculate MOs of multimers/supercells and all translationally unique molecules.
     For each calculation save out,evc,evr,evl files for frontier orbitals
-    (keep enough number of MOs per monomer or save entire evc and s1e files).</li>
-<li>Step 3: Generate translationally-unique ECG-projection basis for each translationally unique monomer and save it as out,evc,evr,evl files.
-    This can be done by ECG of all translationally-unique molecules using some reference orbitals.
-    Reference orbitals can be taken either from MO of the monomer or from ECG of an oligomer.
-    If monomer=molecule, Step 3 can be omitted (in this case the molecule's HOMO/LUMO serves as the basis).</li>
+    (keep enough number of MOs per monomer).
+    Note that the computational bottleneck of the entire protocol is in the DFT calculation of the largest multimer.</li>
+<li>Step 3: Generate translationally-unique ECG-projection basis
+    for each translationally unique monomer and save it as out,evc,evr,evl files.
+    This can be achieved by the projection of MOs of the smallest multimers onto reference orbitals
+    (it is important for such projection to preserve the symmetry between all symmetry-identical monomers).
+    Important output parameter here is <code>minocc2</code> which is the minimum occupation
+    in <a href="https://zhugayevych.me/maple/MolMod/LocalizeMO.html">LocalizeMO</a> output:
+    it should be close to 1 (values below 0.7 require an inspection of the obtained ECG basis).
+    Reference orbitals can be taken either as MOs of the monomer
+    or from ECG of some reference molecule, for which one can take one of the smallest multimers.
+    For nearly degenerate orbitals, a large enough multimer might be needed to obtain the correct reference orbitals (e.g. triphenyltriazine).
+    If monomer=molecule and <code>nof=1</code>, Step 3 can be omitted since HOMO/LUMO can serve as the basis implicitly,
+    but for record-keeping it is better to store the ECG basis explicitly.</li>
 <li>Step 4: Calculate effective ECG Hamiltonian using <a href="https://zhugayevych.me/maple/MolMod/LocalizeMO.html">MultimerH</a> program
-    and save it in <a href="TBH.html">this format</a>.
-    There is an extensive helpful information in several log-files (_mm,_HL,_HS,_HC) generated by the code.
-    Important input parameters:
+    and save it in <a href="TBH.html">this format</a>. Important input parameters:
     <ul>
     <li><code>typ,nof</code> electron/hole and number of orbitals per monomer to define the projection basis,</li>
     <li><code>rmax</code> max distance (in lattice coordinates) from the multimer center to the center of two fragments for which coupling is calculated,
@@ -190,14 +211,23 @@
         to strictly obey symmetry set <code>CDmin&lt;0</code>,</li>
     <li><code>Hsortf,Hpickid</code> sorting function for symmetry-identical matrix elements (the most relevant one goes first)
         and how to pick the best value (currently two options are supported: first (default) or mean).</li>
-    </ul></li>
-<li>Step 5: Print transfer integrals, calculate hopping amplitudes and band structure.
-    The report is saved to txt-file.</li>
+    </ul>
+    There is extensive helpful information in several log-files (_mm,_HL,_HS,_HC) generated by the code.
+    Important output parameter here is <code>minW</code> which is the minimum weight
+    in <a href="https://zhugayevych.me/maple/MolMod/LocalizeMO.html">MultimerH</a> output:
+    small values mean that the multimer MOs are not representable in the ECG basis,
+    which is usually caused by bands entanglement
+    (currently used algorithm cannot disentangle bands, possible solution is to expand ECG basis or minimize multimers).
+    In the HS-list, all entries labeled with *! must be inspected
+    (these couplings will be included but their value strongly depends on multimer).
+    In the HC-list, large deviations for couplings near multimer centers indicate nonoptimal choice of multimers or incomplete ECG basis.</li>
+<li>The generated Hamiltonian can be analyzed by <code>QFT/Models/TB.mw</code> code.</li>
 </ul>
 
 <h2><a name="tb.models">Creation and parametrization of tight-binding models</a></h2>
+<p style="font-size: smaller">Reference: <a href="../tbm/index.html">see here</a>, initial development is in <a href="https://doi.org/10.1021/acs.jpclett.1c00929">JPCL 12, 4674 (2021)</a>
+<br>Code: <code>QFT/Models/TB.mw</code> (available per request)</p>
 <ul>
-<li>Use <code>QFT/Models/TB.mw</code></li>
 <li>Create lattice geometry initialization file in <a href="../tbm/TBgeo.html">this format</a> supplemented with CIF.</li>
 <li>Create TB Hamiltonian initialization file in <a href="../tbm/TBini.html">this format</a>,
     including list of symmetry-unique transfer integrals, visualized with CIF and picture.</li>
