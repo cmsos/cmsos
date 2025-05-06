@@ -121,7 +121,6 @@
 <p style="font-size: smaller">Reference: <a href="https://doi.org/10.1063/5.0155488">JCP 159, 024107 (2023)</a> (initial development)
 <br>Code: <code>LocalizeMO.mw</code> from <a href="https://zhugayevych.me/maple/MolMod/index.html">MolMod package</a>, <code>QFT/Models/ECG/ECG.mw</code> (available per request)</p>
 <ul>
-<li>PBC are supported only at Gamma point (supercell approach).</li>
 <li>Fragmentize system, identify repeating fragments (monomers), and save to file following quantities:
     1) fragments as <code>F=list(list(atom#))</code>;
     2) bonds between fragments as <code>B=list([atom#,atom#])</code>;
@@ -153,15 +152,18 @@
     The rest of the table are matrix elements (in eV for Hamiltonian).</li>
 <li>If needed, create reference LMOs for a fragment by cutting the geometry and basis. Save out,evc,evr,h1e.</li>
 </ul>
+<p>Limitations:</p>
+<ul>
+<li>Currently used algorithm cannot disentangle bands, possible solution is to expand ECG basis or minimize fragments.</li>
+<li>PBC are supported only at Gamma point (supercell approach).</li>
+<li>No long-range electrostatics (see a partial solution in <code>ConjPolymers/Multimer.mw</code>).</li>
+</ul>
+
 
 <h2><a name="molcry.ecg">Calculation of coarse-grained electronic Hamiltonian for molecular crystals</a></h2>
 <p style="font-size: smaller">Reference: in preparation, initial development is in <a href="https://doi.org/10.1146/annurev-physchem-040214-121440">Annu Rev Phys Chem 66, 305 (2015)</a>
 <br>Code: <code>_exam_Heff.mw</code> (under revision) from <a href="https://zhugayevych.me/maple/MolMod/index.html">MolMod package</a></p>
 <ul>
-<li>Current implementation is limited to:
-    1) the same ECG basis for all monomers,
-    2) nondegenerate electronic states (in crystal symmetry).
-    For π-conjugated systems, condition (1) implies that all electronically active monomers have the same π-conjugated backbone and are interconnected by single bonds.</li>
 <li>Load crystal structure, monomerize it,
     then rationalize site positions and initialize FGS subpackage of <a href="https://zhugayevych.me/maple/FiniteGroups/index.html">FiniteGroups package</a>.
     Important input parameters:
@@ -216,12 +218,19 @@
     Important output parameter here is <code>minW</code> which is the minimum weight
     in <a href="https://zhugayevych.me/maple/MolMod/LocalizeMO.html">MultimerH</a> output:
     small values mean that the multimer MOs are not representable in the ECG basis,
-    which is usually caused by bands entanglement
-    (currently used algorithm cannot disentangle bands, possible solution is to expand ECG basis or minimize multimers).
+    which is usually caused by bands entanglement.
     In the HS-list, all entries labeled with *! must be inspected
     (these couplings will be included but their value strongly depends on multimer).
     In the HC-list, large deviations for couplings near multimer centers indicate nonoptimal choice of multimers or incomplete ECG basis.</li>
 <li>The generated Hamiltonian can be analyzed by <code>QFT/Models/TB.mw</code> code.</li>
+</ul>
+<p>Limitations:</p>
+<ul>
+<li>See the limitaitons of <a href="#ecg">Electronic coarse-graining of insulators</a>.</li>
+<li>The same ECG basis for all monomers (for π-conjugated systems,
+    this implies that all electronically active monomers have the same π-conjugated backbone
+    and are interconnected by single bonds).</li>
+<li>Nondegenerate electronic states (in crystal symmetry).</li>
 </ul>
 
 <h2><a name="tb.models">Creation and parametrization of tight-binding models</a></h2>
